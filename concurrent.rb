@@ -21,16 +21,21 @@ else
   ActsAsAccount::GlobalAccount.create(:name => "wait")
 end
 
+start = Time.now
+
 from_account = ActsAsAccount::Account.for("incoming")
 to_account = ActsAsAccount::Account.for("outgoing")
 rev_account = ActsAsAccount::Account.for("revenue")
 
 puts "transactions"
 100.times do
-  ActsAsAccount::Journal.current.transfer(100, from_account, to_account, nil, nil)
-  ActsAsAccount::Journal.current.transfer(5, to_account, rev_account, nil, nil)
+  ActiveRecord::Base.transaction do
+    ActsAsAccount::Journal.current.transfer(100, from_account, to_account)
+    ActsAsAccount::Journal.current.transfer(5, to_account, rev_account)
+  end
 end
 
 puts "bye"
 ActsAsAccount::GlobalAccount.find_by_name("wait").try(:destroy)
 
+puts Time.now - start
