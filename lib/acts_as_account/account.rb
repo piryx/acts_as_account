@@ -6,12 +6,6 @@ module ActsAsAccount
     has_many :postings
     has_many :journals, :through => :postings
 
-    # TODO: discuss with norman: 
-    # validates_presence_of will force an ActiveRecord::find on the object
-    # but we have to create accounts for deleted holder!
-    #
-    # validates_presence_of :holder
-    
     class << self
       
       def recalculate_all_balances
@@ -59,7 +53,7 @@ module ActsAsAccount
       
       def delete_account(account_id)
         transaction do
-          account = where(:id => account_id)
+          account = find(account_id)
           raise ActiveRecord::ActiveRecordError, "Cannot be deleted" unless account.deleteable?
           
           account.holder.destroy if [ManuallyCreatedAccount, GlobalAccount].include?(account.holder.class)

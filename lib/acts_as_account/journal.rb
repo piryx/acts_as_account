@@ -1,10 +1,10 @@
 module ActsAsAccount
   class Journal < ActiveRecord::Base
     set_table_name :acts_as_account_journals
-    
+
     has_many :postings
     has_many :accounts, :through => :postings
-    
+
     class << self
       private :new
       private :create
@@ -13,12 +13,12 @@ module ActsAsAccount
       def current
         Thread.current[:acts_as_account_current] ||= create!
       end
-      
+
       def clear_current
         Thread.current[:acts_as_account_current] = nil
       end
     end
-    
+
     def transfers
       [].tap do |transfers|
         postings.in_groups_of(2) { |postings| transfers << Transfer.new(*postings) }
