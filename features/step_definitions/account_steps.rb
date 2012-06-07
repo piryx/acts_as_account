@@ -48,13 +48,13 @@ end
 When /^I transfer (-?\d+) € from (\w+)'s account to (\w+)'s account$/ do |amount, from, to|
   from_account = User.find_by_name(from).account
   to_account = User.find_by_name(to).account
-  Journal.current.transfer(amount.to_i, from_account, to_account, @reference, @valuta)
+  @transfer_return_value = Journal.current.transfer(amount.to_i, from_account, to_account, @reference, @valuta)
 end
 
 When /^I transfer (\d+) € from global (\w+) account to global (\w+) account$/ do |amount, from, to|
   from_account = Account.for(from)
   to_account = Account.for(to)
-  Journal.current.transfer(amount.to_i, from_account, to_account, @reference, @valuta)
+  @transfer_return_value = Journal.current.transfer(amount.to_i, from_account, to_account, @reference, @valuta)
 end
  
 Then /^the balance\-sheet should be:$/ do |table|
@@ -130,4 +130,8 @@ Then /^the order of the postings is correct$/ do
     assert from.amount < 0
     assert to.amount > 0
   end
+end
+
+Then /^the return value should be nil$/ do
+  assert_equal nil, @transfer_return_value
 end

@@ -10,6 +10,7 @@ Feature: Transfer
     Then Thies's account balance is -30 €
     And Norman's account balance is 30 €
     And the order of the postings is correct
+    And the return value should be nil
     
   Scenario: I transfer a negative amount between accounts having holders
     Given I create a user Thies
@@ -18,6 +19,7 @@ Feature: Transfer
     Then Thies's account balance is 30 €
     And Norman's account balance is -30 €
     And the order of the postings is correct
+    And the return value should be nil
 
   Scenario: I transfer money between global accounts
     Given I create a global wirecard account
@@ -25,6 +27,7 @@ Feature: Transfer
     When I transfer 30 € from global wirecard account to global anonymous_donation account
     Then the global wirecard account balance is -30 €
     And the global anonymous_donation account balance is 30 €
+    And the return value should be nil
 
   Scenario: I transfer money between accounts having a domain object
     Given I create a user Thies
@@ -34,6 +37,7 @@ Feature: Transfer
     And Norman's account balance is 50 €
     And all postings reference Cheque with number 8723
     And Cheque with number 8723 references all postings
+    And the return value should be nil
 
   Scenario: I transfer money between accounts setting the booking time
     Given I create a user Thies
@@ -42,3 +46,4 @@ Feature: Transfer
     Then Thies's account balance is -50 €
     And Norman's account balance is 50 €
     And all postings have 22.05.1968 07:45 as the booking time
+    And the return value should be nil

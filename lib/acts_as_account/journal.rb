@@ -41,6 +41,7 @@ module ActsAsAccount
         add_posting(-amount,  from_account,   to_account, reference, valuta)
         add_posting( amount,    to_account, from_account, reference, valuta)
       end
+      nil
     end
     
     private
